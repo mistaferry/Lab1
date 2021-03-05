@@ -30,11 +30,17 @@ public class Main {
 //        }
 //        System.out.println("\n");;
 
-        
 
+        int[][] matrix = {{20, 18, 22, 20},
+                {18, 20, 18, 21},
+                {16, 18, 16, 20},
+                {25, 24, 22, 24}
+        };
+        matrixOutput(matrix);
+        System.out.println("\n");
         int temp;
         for(int j=0; j< matrix.length; j++) {
-            for (int i = 0; i < matrix.length; i++) {
+            for (int i = j; i < matrix.length/2; i++) {
                 temp=matrix[j][i];
                 matrix[j][i]=matrix[j][matrix.length-1-i];
                 matrix[j][matrix.length-1-i]=temp;
