@@ -1,55 +1,63 @@
 package kpi.ua;
+import java.lang.Math;
+
 
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 public class Main {
 
     public static void main(String[] args) {
         int rows, columns;
 
-//        Scanner scanner = new Scanner(System.in);
-//        System.out.println("Enter Matrix Rows and Columns :  ");
-//        rows = scanner.nextInt();
-//        columns = scanner.nextInt();
-//        System.out.printf("You inputted, %d rows and %d columns\n", rows, columns);
-//        int[][] matrix = new int[rows][columns];
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter Matrix Rows and Columns :  ");
+        rows = scanner.nextInt();
+        columns = scanner.nextInt();
+        System.out.printf("You inputted, %d rows and %d columns\n", rows, columns);
+        int[][] matrix = new int[rows][columns];
 
-//        //Task 1
-//        random(rows, columns, matrix);
-//        matrixOutput(matrix);
-//        rowCol(matrix);
+        long start = System.nanoTime();
 
-        //Task 2
-
-//        for(int i = 0; i < matrix.length/2; i++){
-//            for (int j = matrix.length/2; j<matrix.length -i; j++){
-//                int tmp = matrix[i][j];
-//                matrix[i] = matrix[j];
-//                matrix[j] = tmp;
-//            }
-//        }
-//        System.out.println("\n");;
-
-
-        int[][] matrix = {{20, 18, 22, 20},
-                {18, 20, 18, 21},
-                {16, 18, 16, 20},
-                {25, 24, 22, 24}
-        };
+        System.out.println("\nTASK 1");
+        random(rows, columns, matrix);
         matrixOutput(matrix);
-        System.out.println("\n");
-        int temp;
-        for(int j=0; j< matrix.length; j++) {
-            for (int i = j; i < matrix.length/2; i++) {
-                temp=matrix[j][i];
-                matrix[j][i]=matrix[j][matrix.length-1-i];
-                matrix[j][matrix.length-1-i]=temp;
+        rowCol(matrix);
+
+        System.out.println("\nTASK 2");
+        random(rows, columns, matrix);
+        matrixOutput(matrix);
+        exchange(matrix);
+
+        long end = System.nanoTime() - start;
+        long durationInMs = TimeUnit.NANOSECONDS.toMillis(end);
+
+        System.out.println("Time = "+ durationInMs +" ms");
+    }
+
+    private static void exchange(int[][] matrix) {
+        for (int i = 0; i < matrix.length / 2; i++) {
+            for (int j = i; j < matrix.length / 2; j++) {
+                replaceFun(matrix, i, j);
+            }
+
+        }
+        for (int i = matrix.length - 1; i > matrix.length / 2 - 1; i--) {
+            for (int j = i; j > matrix.length / 2 - 1; j--) {
+                replaceFun(matrix, i, j);
             }
         }
+        System.out.println("Matrix after changes:");
         matrixOutput(matrix);
-
-
     }
+
+    private static void replaceFun(int[][] matrix, int i, int j) {
+        int temp;
+        temp = matrix[i][j];
+        matrix[i][j] = matrix[i][matrix.length - 1 - j];
+        matrix[i][matrix.length - 1 - j] = temp;
+    }
+
 
     private static void matrixOutput(int[][] matrix) {
         for (int i = 0; i < matrix.length; i++) {
@@ -57,28 +65,6 @@ public class Main {
                 System.out.printf("%-3d", matrix[i][j]);
             }
             System.out.println();
-        }
-    }
-
-    private static void rowSum(int[][] matrix) {
-        double rowSum = 0;
-        for (int i = 0; i < matrix.length; i++) {
-            for (int j = 0; j < matrix.length; j++) {
-                rowSum += matrix[i][j];
-            }
-            System.out.printf("The Sum of Matrix Items in Rows %d = %.0f\n", i + 1, rowSum);
-            rowSum = 0;
-        }
-    }
-
-    private static void colSum(int[][] matrix) {
-        double sumCols;
-        for (int i = 0; i < matrix.length; i++) {
-            sumCols = 0;
-            for (int j = 0; j < matrix[0].length; j++) {
-                sumCols = sumCols + matrix[j][i];
-            }
-            System.out.printf("The Sum of Matrix Items in Column %d = %.0f\n", i + 1, sumCols);
         }
     }
 
@@ -93,16 +79,13 @@ public class Main {
     private static void rowCol(int[][] matrix) {
         int rowSum = 0, colSum = 0, colNumb = 1;
 
-        //цикл обрахунку суми елементів вибраного стовбця
         for (int i = 0; i < colNumb; i++) {
             for (int j = 0; j < matrix[0].length; j++) {
                 colSum = colSum + matrix[j][i];
             }
-            System.out.printf("The Sum of Matrix Items in Column %d = %d\n", i + 1, colSum);
+            System.out.printf("The sum of matrix items in the Column %d = %d\n", i + 1, colSum);
         }
-        System.out.println("" + colSum);
 
-        //цикл обрахунку суми елементів кожного рядка
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix.length; j++) {
                 rowSum += matrix[i][j];
@@ -110,9 +93,10 @@ public class Main {
             if (rowSum < colSum) {
                 inTen(matrix, i);
             }
-            System.out.printf("The Sum of Matrix Items in Rows %d = %d\n", i + 1, rowSum);
+            System.out.printf("The sum of matrix items in the Row %d = %d\n", i + 1, rowSum);
             rowSum = 0;
         }
+        System.out.println("Matrix after changes:");
         matrixOutput(matrix);
 
     }
